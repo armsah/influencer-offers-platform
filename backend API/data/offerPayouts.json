@@ -1,66 +1,73 @@
 [
   {
-    "offerId": "offer_1",
-    "type": "CPA",
-    "cpaAmount": 20,
-    "cpaCountryOverrides": {
-      "DE": 30,
-      "GB": 27
-    }
+    "offerId": "offer_1769851564258",
+    "type": "FIXED",
+    "fixedAmount": 300
   },
   {
-    "offerId": "offer_2",
+    "offerId": "offer_1769852348329",
     "type": "FIXED",
     "fixedAmount": 500
   },
   {
-    "offerId": "offer_3",
+    "offerId": "offer_1769852705439",
     "type": "CPA",
-    "cpaAmount": 48,
+    "cpaAmount": 40,
     "cpaCountryOverrides": {
-      "EST": 20,
-      "FI": 45,
-      "DE": 70
+      "GB": 90,
+      "US": 30
     }
   },
   {
-    "offerId": "offer_4",
+    "offerId": "offer_1769853383784",
     "type": "CPA",
-    "cpaAmount": 20,
+    "cpaAmount": 15
+  },
+  {
+    "offerId": "offer_1769853560630",
+    "type": "CPA",
+    "cpaAmount": 28,
     "cpaCountryOverrides": {
-      "CN": 50,
-      "IT": 27,
-      "BR": 35
+      "DE": 40
     }
   },
   {
-    "offerId": "offer_5",
-    "type": "CPA + FIXED",
-    "cpaAmount": 25,
-    "fixedAmount": 500
-  },
-  {
-    "offerId": "offer_1769692321365",
-    "type": "CPA",
-    "cpaAmount": 45,
-    "cpaCountryOverrides": {
-      "US": 80,
-      "BE": 38
-    }
-  },
-  {
-    "offerId": "offer_1769694737492",
-    "type": "CPA",
-    "cpaAmount": 30,
-    "cpaCountryOverrides": {
-      "CH": 90,
-      "GB": 78
-    }
-  },
-  {
-    "offerId": "offer_1769694855900",
+    "offerId": "offer_1769853805288",
     "type": "CPA_AND_FIXED",
     "cpaAmount": 30,
+    "cpaCountryOverrides": {
+      "GB": 76
+    },
+    "fixedAmount": 700
+  },
+  {
+    "offerId": "offer_1769854005161",
+    "type": "CPA_AND_FIXED",
+    "cpaAmount": 57,
+    "cpaCountryOverrides": {
+      "CH": 45,
+      "US": 100
+    },
+    "fixedAmount": 890
+  },
+  {
+    "offerId": "offer_1769854728809",
+    "type": "FIXED",
     "fixedAmount": 300
+  },
+  {
+    "offerId": "offer_1769855005421",
+    "type": "FIXED",
+    "fixedAmount": 250
+  },
+  {
+    "offerId": "offer_1769855196055",
+    "type": "FIXED",
+    "fixedAmount": 180
+  },
+  {
+    "offerId": "offer_1769855349459",
+    "type": "CPA",
+    "cpaAmount": 70
   }
 ]

@@ -55,6 +55,7 @@ async function listOffersForInfluencer() {
 
       console.log('---');
       if (offer) {
+        console.log(`ID: ${offer.id}`);
         console.log(`Title: ${offer.title}`);
         console.log(`Description: ${offer.description}`);
         console.log(`Categories: ${offer.categories.join(', ')}`);

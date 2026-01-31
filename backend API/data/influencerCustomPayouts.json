@@ -1,49 +1,26 @@
 [
   {
-    "offerId": "offer_1",
-    "influencerId": "inf_123",
+    "offerId": "offer_1769854728809",
+    "influencerId": "infl_1",
     "type": "FIXED",
     "fixedAmount": 1000
   },
   {
-    "offerId": "offer_3",
-    "influencerId": "inf_123",
+    "offerId": "offer_1769855005421",
+    "influencerId": "infl_1",
     "type": "FIXED",
-    "fixedAmount": 1500
+    "fixedAmount": 5000
   },
   {
-    "offerId": "offer_4",
-    "influencerId": "inf_789",
+    "offerId": "offer_1769855196055",
+    "influencerId": "infl_2",
     "type": "FIXED",
-    "fixedAmount": 3500
+    "fixedAmount": 4000
   },
   {
-    "offerId": "offer_1769692321365",
-    "influencerId": "inf_111",
-    "type": "CPA",
-    "cpaAmount": 45,
-    "cpaCountryOverrides": {
-      "US": 80,
-      "BE": 38
-    }
-  },
-  {
-    "offerId": "offer_1769694347636",
-    "influencerId": "inf_321",
-    "type": "CPA",
-    "cpaAmount": 24,
-    "cpaCountryOverrides": {
-      "GB": 27
-    }
-  },
-
-  {
-    "offerId": "offer_1769694347636",
-    "influencerId": "inf_321",
-    "type": "CPA",
-    "cpaAmount": 24,
-    "cpaCountryOverrides": {
-      "GB": 27
-    }
+    "offerId": "offer_1769855349459",
+    "influencerId": "infl_3",
+    "type": "FIXED",
+    "fixedAmount": 5000
   }
 ]

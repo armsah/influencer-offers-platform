@@ -5,7 +5,7 @@ const OFFERS_FILE = './data/offers.json';
 const PAYOUTS_FILE = './data/offerPayouts.json';
 const CUSTOM_PAYOUTS_FILE = './data/influencerCustomPayouts.json';
 
-// Read and write JSON files
+// Helper to read JSON file
 async function readJSON(file) {
   try {
     const data = await fs.readFile(file, 'utf8');
@@ -15,43 +15,39 @@ async function readJSON(file) {
   }
 }
 
+// Helper to write JSON file
 async function writeJSON(file, data) {
   await fs.writeFile(file, JSON.stringify(data, null, 2));
 }
 
-// Helper function to prompt user
+// Prompt helper
 function prompt(question) {
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
-
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      rl.close();
-      resolve(answer);
-    });
-  });
+  return new Promise((resolve) => rl.question(question, (answer) => {
+    rl.close();
+    resolve(answer);
+  }));
 }
 
-// Validate and parse payout input
-async function getPayout(type) {
+// Get base payout
+async function getBasePayout() {
+  const type = (await prompt('Enter base payout type (CPA/FIXED/CPA_AND_FIXED): ')).toUpperCase();
   const payout = { type };
 
   if (type === 'CPA' || type === 'CPA_AND_FIXED') {
-    // Base CPA
     payout.cpaAmount = Number(await prompt('Enter base CPA amount: '));
 
-    // Ask if user wants country-specific overrides
-    const overrideInput = await prompt('Do you want country-specific CPA overrides? (yes/no): ');
-    if (overrideInput.toLowerCase() === 'yes') {
+    // Optional country-specific overrides
+    const countryOverride = (await prompt('Add country-specific CPA overrides? (yes/no): ')).toLowerCase();
+    if (countryOverride === 'yes') {
       payout.cpaCountryOverrides = {};
-
       while (true) {
         const country = await prompt('Enter country code (or press Enter to finish): ');
         if (!country) break;
-
-        const amount = Number(await prompt(`Enter CPA for ${country}: `));
+        const amount = Number(await prompt(`Enter CPA amount for ${country}: `));
         payout.cpaCountryOverrides[country.toUpperCase()] = amount;
       }
     }
@@ -64,42 +60,39 @@ async function getPayout(type) {
   return payout;
 }
 
-async function getCustomPayouts(offerId) {
+/// Get custom payout for a specific influencer (always FIXED)
+async function getCustomPayout(offerId) {
   const customPayouts = [];
-  const addCustom = await prompt('Do you want to add a custom payout for a specific influencer? (yes/no): ');
+  const addCustom = (await prompt('Add a custom payout for a specific influencer? (yes/no): ')).toLowerCase();
 
-  if (addCustom.toLowerCase() === 'yes') {
+  if (addCustom === 'yes') {
     const influencerId = await prompt('Enter influencer ID: ');
-    const type = await prompt('Enter payout type for this influencer (CPA/FIXED/CPA_AND_FIXED): ');
-    const payout = await getPayout(type);
+    const fixedAmount = Number(await prompt('Enter FIXED amount for this influencer: '));
 
     customPayouts.push({
       offerId,
       influencerId,
-      ...payout
+      type: 'FIXED',
+      fixedAmount
     });
   }
 
   return customPayouts;
 }
 
-
 // Main function
 async function createOffer() {
   try {
+    // Get offer info
     const title = await prompt('Enter offer title: ');
     const description = await prompt('Enter offer description: ');
     const catInput = await prompt('Enter categories (comma separated): ');
-    const type = await prompt('Enter payout type (CPA/FIXED/CPA_AND_FIXED): ');
-
-    if (!['CPA', 'FIXED', 'CPA_AND_FIXED'].includes(type)) {
-      throw new Error('Invalid payout type');
-    }
-
     const categories = catInput.split(',').map(c => c.trim());
-    const payout = await getPayout(type);
 
-    // Read existing data
+    // Base payout
+    const basePayout = await getBasePayout();
+
+    // Read existing files
     const [offers, payouts, customPayoutsData] = await Promise.all([
       readJSON(OFFERS_FILE),
       readJSON(PAYOUTS_FILE),
@@ -109,26 +102,25 @@ async function createOffer() {
     // Create new offer
     const offerId = `offer_${Date.now()}`;
     offers.push({ id: offerId, title, description, categories });
-    payouts.push({ offerId, ...payout });
+    payouts.push({ offerId, ...basePayout });
 
-    // Add custom payouts
-    const customPayouts = await getCustomPayouts(offerId);
-
-    // Merge with existing custom payouts
+    // Custom payouts
+    const customPayouts = await getCustomPayout(offerId);
     const updatedCustomPayouts = [...customPayoutsData, ...customPayouts];
 
-    // Write updated data
+    // Save all
     await Promise.all([
       writeJSON(OFFERS_FILE, offers),
       writeJSON(PAYOUTS_FILE, payouts),
       writeJSON(CUSTOM_PAYOUTS_FILE, updatedCustomPayouts)
     ]);
 
-    console.log('Offer created with ID:', offerId);
-  } catch (error) {
-    console.error('Error:', error.message);
-    process.exit(1);
+    console.log(`Offer created successfully! Offer ID: ${offerId}`);
+    if (customPayouts.length > 0) console.log('Custom payouts added for specific influencers.');
+  } catch (err) {
+    console.error('Error:', err.message);
   }
 }
 
+// Run
 createOffer();

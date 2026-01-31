@@ -3,6 +3,7 @@ const readline = require('readline');
 
 const OFFERS_FILE = './data/offers.json';
 const PAYOUTS_FILE = './data/offerPayouts.json';
+const CUSTOM_PAYOUTS_FILE = './data/influencerCustomPayouts.json';
 
 // Read/write JSON helpers
 async function readJSON(file) {
@@ -34,9 +35,10 @@ async function deleteOffer() {
   try {
     const offerId = await prompt('Enter the Offer ID to delete: ');
 
-    const [offers, payouts] = await Promise.all([
+    const [offers, payouts, customPayouts] = await Promise.all([
       readJSON(OFFERS_FILE),
-      readJSON(PAYOUTS_FILE)
+      readJSON(PAYOUTS_FILE),
+      readJSON(CUSTOM_PAYOUTS_FILE)
     ]);
 
     const offerIndex = offers.findIndex(o => o.id === offerId);
@@ -45,21 +47,24 @@ async function deleteOffer() {
       return;
     }
 
-    // Remove offer and its payout
+    // Remove offer
     offers.splice(offerIndex, 1);
 
+    // Remove base payout
     const payoutIndex = payouts.findIndex(p => p.offerId === offerId);
-    if (payoutIndex !== -1) {
-      payouts.splice(payoutIndex, 1);
-    }
+    if (payoutIndex !== -1) payouts.splice(payoutIndex, 1);
+
+    // Remove custom payouts for this offer
+    const remainingCustomPayouts = customPayouts.filter(p => p.offerId !== offerId);
 
     // Save updated files
     await Promise.all([
       writeJSON(OFFERS_FILE, offers),
-      writeJSON(PAYOUTS_FILE, payouts)
+      writeJSON(PAYOUTS_FILE, payouts),
+      writeJSON(CUSTOM_PAYOUTS_FILE, remainingCustomPayouts)
     ]);
 
-    console.log('Offer deleted successfully!');
+    console.log('Offer and its payouts deleted successfully!');
   } catch (error) {
     console.error('Error:', error.message);
   }
